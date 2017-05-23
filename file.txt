@@ -1,0 +1,89 @@
+section .text
+global main
+main:
+	mov eax,8
+	mov ebx,filename
+	mov ecx,0777
+	int 0x80
+
+	mov [fd_out],eax
+	mov edx,len
+	mov ecx,msg
+	mov ebx,[fd_out]
+	mov eax,4
+	int 0x80
+
+	mov eax,6
+	mov ebx,[fd_out]
+	mov eax,4
+	mov ebx,1
+	mov ecx,msg_done
+	mov edx,len_done
+	int 0x80
+
+	mov eax,5
+	mov ebx,filename
+	mov ecx,0
+	mov edx,0777
+	int 0x80
+
+	mov [fd_in],eax
+	mov eax,3
+	mov ebx,[fd_in]
+	mov ecx,info
+	mov edx,26
+	int 0x80
+
+	mov eax,8
+	mov ebx,filename1
+	mov ecx,0777
+	int 0x80
+
+	mov[f_out],eax
+	mov edx,len
+	mov ecx,msg
+	mov ebx,[f_out]
+	mov eax,4
+	int 0x80
+
+	mov eax,6
+	mov ebx,[fd_out]
+	mov eax,4
+	mov ebx,1
+	mov ecx,msg_copy
+mov edx,len_done
+int 0x80
+
+mov eax,6
+
+mov ebx,[fd_in]
+mov eax,5
+mov ebx,filename1
+mov ecx,0
+mov edx,0777
+
+int 0x80
+
+mov [f_in],eax
+mov eax,3
+mov ebx,[f_in]
+mov ecx,info
+mov edx,26
+int 0x80
+section .data
+	fd_in:times 4 db 0
+	f_in:times 4 db 0
+	fd_out:times 4 db 0
+	f_out:times 4 db 0
+	info db 0
+	filename db ' myfile.text'
+	filename1 db 'copy.text'
+	msg db 'hiiiii'
+	len equ $-msg
+	msg_done db 'written.file',10,0
+	len_done equ $-msg_done
+msg_copy db "copy to file",10,0
+len_copy equ $-msg_copy
+
+
+

@@ -1,0 +1,40 @@
+
+global main
+extern printf
+extern scanf
+section .text
+main:
+push ebx
+push msg
+call printf
+add esp,4
+push limit
+push formatin
+call scanf
+add esp,8
+mov ecx,dword[limit]
+xor eax,eax
+xor ebx,ebx
+inc eax
+label:
+push eax
+push ecx
+push ebx
+push format
+call printf
+add esp,8
+pop ecx
+pop eax
+mov edx,eax
+mov eax,ebx
+add ebx,edx
+dec ecx
+jnz label
+pop ebx
+ret
+section .data
+format: db "%10d",0
+formatin: db "%d",0
+msg: db "enter the limit",0
+limit: times 4 db 0 
+

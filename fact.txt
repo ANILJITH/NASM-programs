@@ -1,0 +1,43 @@
+section .data
+	msg: db "enter no",0
+	formatin: db "%d",0
+	formatout: db "%d",10,0
+	integer1: times 4 db 0
+
+section .text
+	global main
+	extern printf
+	extern scanf
+main:
+	push ebp
+	mov ebp,esp
+	push ecx
+	
+	push msg
+	call printf
+	add esp,4
+
+	push integer1
+	push formatin
+	call scanf
+	add esp,8
+
+	mov ecx,[integer1]
+	mov eax,1
+
+factorial:
+	cmp ecx,0
+	jz done
+	mul ecx
+	dec ecx
+	jmp factorial
+
+done:
+	push eax
+	push formatout
+	call printf
+	add esp,8
+
+	pop ecx
+	pop ebp	
+	ret

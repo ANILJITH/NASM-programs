@@ -1,0 +1,30 @@
+section .data
+	msg0 db "Parent Process",10,0
+	len0 equ $-msg0
+	msg1 db "Child Process",10,0
+	len1 equ $-msg1
+section .text
+	global main
+main:
+	mov eax,2
+	int 0x80
+	cmp eax,0
+	jz child
+	mov eax,4
+	mov ebx,1
+	mov ecx,msg0
+	mov edx,len0
+	int 0x80
+	jmp exit
+child:
+	mov eax,4
+	mov ebx,1
+	mov ecx,msg1
+	mov edx,len1
+	int 0x80
+exit:
+	mov eax,1
+	xor ebx,ebx
+	int 0x80
+
+

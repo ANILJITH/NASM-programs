@@ -1,0 +1,264 @@
+section .data
+	msg1 db"CALCULATOR",10,0
+	msg2 db"multiplication",10,0
+	msg3 db"division",10,0
+	msg10 db"addition",10,0
+	msg11 db"subtract",10,0
+	msg4 db"enter first",10,0
+	msg5 db"enter second",10,0
+	msg6 db"enter option",10,0
+	msg7 db"3.enter 3 for multiplicaton",10,0
+	msg12 db"1.enter 1 for addition",10,0
+	msg13 db"2.enter 2 for subtraction",10,0
+	msg8 db"4.enter 4 for division",10,0
+	
+	msg9 db"enter 1 to continue",0
+	format : db "%d",0
+	n : times 4 db 0
+	n1 : times 4 db 0
+	n2 : times 4 db 0
+
+section .text
+	global main
+	extern printf
+	extern scanf
+
+main:
+	push msg1
+	call printf
+	add esp,4
+
+	push msg12
+	call printf
+	add esp,4
+	
+	push msg13
+	call printf
+	add esp,4
+	
+	push msg7
+	call printf
+	add esp,4
+
+	push msg8
+	call printf
+	add esp,4
+
+	push msg6
+	call printf
+	add esp,4
+
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,1
+	jz addition
+	cmp ecx,2
+	jz subtraction
+	cmp ecx,3
+	jz multiplication
+	cmp ecx,4
+	jz division
+	ret
+
+
+addition:
+	push msg10
+	call printf
+	add esp,4
+
+	push eax
+	push ecx
+
+	push msg4
+	call printf
+	add esp,4
+
+	push n1
+	push format
+	call scanf
+	add esp,8
+
+
+	push msg5
+	call printf
+	add esp,4
+
+	push n2
+	push format
+	call scanf
+	add esp,8
+
+	mov eax,[n1]
+	mov ecx,[n2]
+	add eax,ecx
+
+	push eax
+	push format
+	call printf
+	add esp,8
+
+	pop ecx
+	pop ebx
+	mov ebx,0
+
+	push msg9
+	call printf
+	add esp,4
+
+	push n
+	push format
+	call scanf
+	add esp,8
+
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret
+
+subtraction:
+	push msg11
+	call printf
+	add esp,4
+
+	push eax
+	push ecx
+
+	push msg4
+	call printf
+	add esp,4
+
+	push n1
+	push format
+	call scanf
+	add esp,8
+
+
+	push msg5
+	call printf
+	add esp,4
+
+	push n2
+	push format
+	call scanf
+	add esp,8
+
+	mov eax,[n1]
+	mov ecx,[n2]
+	sub eax,ecx
+
+	push eax
+	push format
+	call printf
+	add esp,8
+
+	pop ecx
+	pop ebx
+	mov ebx,0
+
+	push msg9
+	call printf
+	add esp,4
+
+	push n
+	push format
+	call scanf
+	add esp,8
+
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret
+
+
+multiplication:
+	push msg2
+	call printf
+	add esp,4
+	push eax
+	push ecx
+	push msg4
+	call printf
+	add esp,4
+	push n1
+	push format
+	call scanf
+	add esp,8
+	push msg5
+	call printf
+	add esp,4
+	push n2
+	push format
+	call scanf
+	add esp,8
+	mov eax,[n1]
+	mov ecx,[n2]
+	mul ecx
+	push eax
+	push format
+	call printf
+	add esp,8
+	pop ecx
+	pop ebx
+	mov ebx,0
+	push msg9
+	call printf
+	add esp,4
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret
+
+division:
+	push msg3
+	call printf
+	add esp,4
+	push eax
+	push ecx
+	
+	push msg4
+	call printf
+	add esp,4
+	push n1
+	push format
+	call scanf
+	add esp,8
+		
+	push msg5
+	call printf
+	add esp,4
+	push n2
+	push format
+	call scanf
+	add esp,8
+	xor edx,edx
+
+	mov eax,dword[n1]
+	mov ecx,dword[n2]
+	div ecx
+	push eax
+	push format
+	call printf
+	add esp,8
+
+	pop ecx
+	pop ebx
+	mov ebx,0
+
+	push msg9
+	call printf
+	add esp,4
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret

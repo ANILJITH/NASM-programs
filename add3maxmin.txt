@@ -1,0 +1,195 @@
+ section .data
+
+	msg01     db  "Menu",10,0
+	msg02     db  "1.Enter 1 for addition: ",10,0
+	msg03     db  "2.Enter 2 for finding the min and max:",10,0
+	msg04     db  "Enter your choice: ",10,0
+	msg1     db  'Enter the first digit:  ',0 
+	msg2     db  'Enter the second digit: ',0 
+	msg3     db  'Enter the second digit: ',0 
+	msg4     db  'Result: ',0
+	msg5     db  "Maximum number: ",0
+	msg6     db  "Minimum number: ",0
+	msg7	 db  "Enter 1 to continue: ",0
+	format  db "%d",0
+	num times 4 db 0
+	num1 times 4 db 0
+	num2 times 4 db 0
+	num3 times 4 db 0
+
+section .text
+	global main
+	extern printf              
+	extern scanf              
+
+main:
+
+
+	push ebp
+	mov ebp,esp
+	push msg01
+	call printf
+	add esp, 4 
+
+	push msg02
+	call printf
+	add esp, 4
+
+	push msg03
+	call printf
+	add esp, 4
+	
+	push msg04
+	call printf
+	add esp, 4 
+ 
+	push num
+	push format
+	call scanf
+	add esp, 8
+	
+	mov ecx,[num]
+	cmp ecx,1
+	jz addition
+	
+	cmp ecx,2
+	jz min_max
+	
+	pop ebp	
+	ret
+
+
+addition:	
+ 	push msg1
+	call printf
+	add esp, 4
+
+	push num1
+	push format
+	call scanf
+	add esp, 8
+	 
+	push msg2
+	call printf
+	add esp, 4
+
+	push num2
+	push format
+	call scanf
+	add esp, 8
+
+	push msg3
+	call printf
+	add esp, 4
+
+	push num3
+	push format
+	call scanf
+	add esp, 8
+	
+	mov eax,[num1]
+	mov ebx,[num2]
+	add eax,ebx
+	mov ebx,[num3]
+	add eax,ebx
+	
+
+	push msg4
+	call printf
+	add esp, 4
+
+	push eax
+	push format
+	call printf
+	add esp, 8
+	
+	xor eax,eax
+	xor ebx,ebx
+
+	push msg7
+	call printf
+	add esp, 4
+
+	push num
+	push format
+	call scanf
+	add esp, 8
+	
+	mov ecx,[num]
+	cmp ecx,1
+	jz main
+	ret
+	
+	
+min_max:	
+	push msg1
+	call printf
+	add esp, 4
+
+	push num1
+	push format
+	call scanf
+	add esp, 8
+	 
+	push msg2
+	call printf
+	add esp, 4
+
+	push num2
+	push format
+	call scanf
+	add esp, 8
+
+	push msg3
+	call printf
+	add esp, 4
+
+	push num3
+	push format
+	call scanf
+	add esp, 8
+	
+
+	mov ecx, [num1]
+max:
+	cmp ecx,[num2]
+	jg maxt
+	mov ecx,[num2]
+maxt:
+	cmp ecx,[num3]
+	jg print1
+	mov ecx,[num3]
+print1:
+	push ecx
+	push msg5
+	call printf
+	add esp,4
+	push format
+	call printf
+	add esp,8
+	mov ebx,[num1]
+min:
+	cmp ebx,[num2]
+	jl mint
+	mov ebx,[num2]
+mint:
+	cmp ebx,[num3]
+	jl print2
+	mov ebx,[num3]
+print2:
+	push ebx
+	push msg6
+	call printf
+	add esp,4
+	push format
+	call printf
+	add esp,8
+	pop ebx
+	pop ecx
+	ret
+
+
+
+
+
+

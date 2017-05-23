@@ -1,0 +1,210 @@
+%macro write_string 4
+mov eax,%1
+mov ebx,%2
+mov ecx,%3
+mov edx,%4
+int 0x80
+%endmacro
+
+section .text
+global main
+main:
+	write_string 4,1,msg,msglen
+	write_string 4,1,msg11,msg11len
+	write_string 4,1,msg12,msg12len
+        write_string 4,1,msg13,msg13len
+	write_string 4,1,msg14,msg14len
+        write_string 4,1,msg15,msg15len
+        write_string 4,1,msg16,msg16len
+        write_string 4,1,msg17,msg17len
+	write_string 3,0,choice,2
+ 	
+	cmp byte[choice],'1'
+ 	je opt0
+	 cmp byte[choice],'2'
+        je opt1
+	cmp byte[choice],'3'
+        je opt2
+         cmp byte[choice],'4'
+        je opt3
+	 cmp byte[choice],'5'
+        je opt4
+	call exit
+ opt0:
+	write_string 4,1,msg1,msg1len
+	write_string 3,0,str1,50
+	dec eax
+	mov [len],eax
+	jmp main
+ opt1:
+	call len1
+	jmp main
+ opt2:
+	call ccnt
+	jmp main
+ opt3:
+	call comp
+	jmp main
+ opt4:
+	call sub1
+	jmp main
+ len1:
+	mov esi,dispnum+15
+	mov eax,[len]
+	mov ecx,16
+cnt:
+	mov edx,0000
+	mov ebx,10
+	div ebx
+	add dl,30h
+	mov [esi],dl
+	dec esi
+	loop cnt
+	write_string 4,1,msg2,msg2len
+        write_string 4,1,dispnum,16
+	ret
+
+ccnt:
+	write_string 4,1,msg1,msg1len
+        write_string 3,0,str3,50
+	dec eax
+        mov [len],eax
+	mov ecx,0000
+	mov ecx,[len]
+	mov esi,[len]
+	mov esi,str1
+	mov edi,str2
+	cld
+	rep movsb
+	mov ecx,str3len
+	mov esi,str3
+ 	rep movsb
+	int 80h
+	write_string 4,1,msg3,msg3len
+	 write_string 4,1,str2,str2len
+	ret
+
+comp:
+         write_string 4,1,msg1,msg1len
+        write_string 3,0,str3,50
+	dec eax
+	mov [len],eax
+	mov ecx,0000
+        mov ecx,[len]
+        mov esi,str1
+        mov edi,str3
+	mov ecx,str3len
+	cld
+	repe cmpsb
+	je equal
+
+        write_string 4,1,msg5,msg5len
+	ret
+equal:
+	write_string 4,1,msg4,msg4len
+        ret
+
+
+sub1:
+	write_string 4,1,msg1,msg1len
+        write_string 3,0,str3,50
+	 dec eax
+        mov [len],eax
+        mov ecx,0000
+        mov ecx,[len]
+        mov edi,str1
+        mov eax,[str3]
+        cld
+	repne scasb
+	je found
+	write_string 4,1,msg6,msg6len
+	ret
+
+found:
+        write_string 4,1,msg7,msg7len
+        ret
+
+exit:
+	mov eax,1
+	xor ebx,ebx
+	int 80h
+
+section .data
+	
+	msg1 db"enter your string",10,0
+	msg1len equ $-msg1
+	msg2 db"length of string",10,0
+        msg2len equ $-msg2
+	msg3 db" string after concatenation",10,0
+        msg3len equ $-msg3
+        msg4 db" string are equal",10,0
+        msg4len equ $-msg4
+	msg5 db" strings are not equal",10,0
+        msg5len equ $-msg5
+        msg6 db" strings not found",10,0
+        msg6len equ $-msg6
+	msg7 db"string found",10,0
+	msg7len equ $-msg7
+
+	msg db "menu",10,0
+	msglen equ $-msg
+
+	msg11 db "1 enter  string",10,0
+	msg11len equ $-msg11
+
+	 msg12 db"2 length of string",10,0
+        msg12len equ $-msg12
+
+	msg13 db "3 concatenate",10,0
+        msg13len equ $-msg13
+
+         msg14 db"4 string compare",10,0
+        msg14len equ $-msg14
+
+	msg15 db "5 substring search",10,0
+        msg15len equ $-msg15
+
+         msg16 db"6 exit",10,0
+        msg16len equ $-msg16
+
+        msg17 db "7 enter choice",10,0
+        msg17len equ $-msg17
+
+section .bss
+ 	choice resb 2
+	dispnum resb 16
+	len resb 10
+	llen equ $-len
+	str1 resb 50
+	strlen equ $-str1
+	 str2 resb 50
+        str2len equ $-str2
+	str3 resb 50
+        str3len equ $-str3
+
+
+
+
+
+
+
+
+
+        
+
+
+
+	
+
+       
+
+	
+
+	
+
+
+
+
+
+
+

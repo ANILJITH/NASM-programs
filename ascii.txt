@@ -1,0 +1,51 @@
+section .data
+	msg db "enter character: ",10,0
+	format:db "%d",0,0
+	format1:db "%c",0,0
+	var1 times 4 db 0
+section .text
+	global main
+	extern printf
+	extern scanf
+main:
+	push ebp
+	mov ebp,esp
+	push msg
+	call printf
+	add esp,4
+	push var1
+	push format1
+	call scanf
+	add esp,8
+	mov eax,[var1]
+	mov ebx,80h
+	mov cx,8
+print1:
+	push ax
+	push cx
+	push bx
+	test ax,bx
+	jz print0
+	mov edx,1
+	push edx
+	push format
+	call printf
+	add esp,8
+	jmp nextbit
+print0:
+	mov edx,0
+	push edx
+	push format
+	call printf
+	add esp,8
+nextbit:
+	pop bx
+	shr bx,1
+	pop cx
+	dec cx
+	pop ax
+	jnz print1
+done:
+	pop ebp
+	ret
+

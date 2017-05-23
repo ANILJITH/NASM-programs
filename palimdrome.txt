@@ -1,0 +1,62 @@
+%macro write_string 4
+mov eax,%1
+mov ebx,%2
+mov ecx,%3
+mov edx,%4
+int 0x80
+%endmacro
+section .data
+msg db "enter your string:",10,0
+msglen equ $-msg
+msg5 db "string is palindrome:",10,0
+msg5len equ $-msg5
+msg6 db "string is not a palindrome:",10,0
+msg6len equ $-msg6
+
+section .bss
+dispnum resb 16
+len resd 1
+str1  resb 50
+str1len equ $-str1
+str2 resb 50
+str2len equ $-str2
+
+section .text
+global main
+main:
+write_string 4,1,msg,msglen
+write_string 3,0,str1,50
+dec eax
+mov[len],eax
+
+palin:
+mov ecx,0000
+mov ecx,[len]
+mov esi,str1
+add esi,ecx
+sub esi,1
+mov edi,str2
+
+up2:
+mov al,[esi]
+mov [edi],al
+dec esi
+inc edi
+loop up2
+mov esi,str1
+mov edi,str2
+
+loop1:
+mov al,[esi]
+cmp al,[edi]
+jne down
+inc esi
+inc edi
+dec byte[len]
+jnz loop1
+write_string 4,1,msg5,msg5len
+ret
+
+down:
+write_string 4,1,msg6,msg6len
+ret 

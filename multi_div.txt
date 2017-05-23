@@ -1,0 +1,133 @@
+section .data
+	msg1 db"menu",10,0
+	msg2 db"multiplication",10,0
+	msg3 db"division",10,0
+	msg4 db"enter first",10,0
+	msg5 db"enter second",10,0
+	msg6 db"enter option",10,0
+	msg7 db"enter 0 for multiplicaton",10,0
+	msg8 db"enter 1 for division",10,0
+	msg9 db"enter 1 to continue",0
+	format : db "%d",0
+	n : times 4 db 0
+	n1 : times 4 db 0
+	n2 : times 4 db 0
+
+section .text
+	global main
+	extern printf
+	extern scanf
+
+main:
+	push msg1
+	call printf
+	add esp,4
+	push msg6
+	call printf
+	add esp,4
+	push msg7
+	call printf
+	add esp,4
+	push msg8
+	call printf
+	add esp,4
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,0
+	jz done
+	cmp ecx,1
+	jz done2
+	ret
+
+done:
+	push msg2
+	call printf
+	add esp,4
+	push eax
+	push ecx
+	push msg4
+	call printf
+	add esp,4
+	push n1
+	push format
+	call scanf
+	add esp,8
+	push msg5
+	call printf
+	add esp,4
+	push n2
+	push format
+	call scanf
+	add esp,8
+	mov eax,[n1]
+	mov ecx,[n2]
+	mul ecx
+	push eax
+	push format
+	call printf
+	add esp,8
+	pop ecx
+	pop ebx
+	mov ebx,0
+	push msg9
+	call printf
+	add esp,4
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret
+
+done2:
+	push msg3
+	call printf
+	add esp,4
+	push eax
+	push ecx
+	
+	push msg4
+	call printf
+	add esp,4
+	push n1
+	push format
+	call scanf
+	add esp,8
+		
+	push msg5
+	call printf
+	add esp,4
+	push n2
+	push format
+	call scanf
+	add esp,8
+	xor edx,edx
+
+	mov eax,dword[n1]
+	mov ecx,dword[n2]
+	div ecx
+	push eax
+	push format
+	call printf
+	add esp,8
+
+	pop ecx
+	pop ebx
+	mov ebx,0
+
+	push msg9
+	call printf
+	add esp,4
+	push n
+	push format
+	call scanf
+	add esp,8
+	mov ecx,[n]
+	cmp ecx,1
+	jz main
+	ret

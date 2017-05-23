@@ -1,0 +1,88 @@
+section .data
+
+message1:db"Enter the  first number: ", 0
+message2: db "Enter the second number: ", 0
+message3: db "Enter the third number: ", 0
+message4: db "the largest is",0
+message5: db "the smallest is",0
+formatin: db "%d", 0
+formatout: db "%d", 10, 0             
+num1: times 4 db 0                
+num2: times 4 db 0
+num3: times 4 db 0
+
+
+section .text
+global main
+extern printf
+extern scanf
+main:
+
+
+push ecx
+
+push edx
+push message1
+call printf
+add esp, 4 
+push num1
+push formatin
+call scanf
+add esp, 8
+
+push message2
+call printf
+add esp, 4
+push num2
+push formatin
+call scanf
+add esp, 8
+
+push message3
+call printf
+add esp, 4
+push num3
+push formatin
+call scanf
+add esp, 8
+mov ecx, [num1]
+max:
+cmp ecx,[num2]
+jg maxt
+mov ecx,[num2]
+maxt:
+cmp ecx,[num3]
+jg print1
+mov ecx,[num3]
+print1:
+push ecx
+push message4
+call printf
+add esp,4
+push formatout
+call printf
+add esp,8
+mov ebx,[num1]
+min:
+cmp ebx,[num2]
+jl mint
+mov ebx,[num2]
+mint:
+cmp ebx,[num3]
+jl print2
+mov ebx,[num3]
+print2:
+push ebx
+push message5
+call printf
+add esp,4
+push formatout
+call printf
+add esp,8
+pop ebx
+pop ecx
+ret
+
+
+
+

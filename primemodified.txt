@@ -1,0 +1,73 @@
+;Finding primes logic
+;Find all prime numbers up to a given N
+;For each odd number<= N , find its factors(2 is prime),
+;If no factor can be found, then it is prime
+;If there is a factor, it must be odd
+%macro write_int 0
+      push eax
+      push formatout 
+      call printf ;display the number
+      add esp,8 ;remove parameters
+%endmacro
+
+SECTION .data
+Message: db "Find primes up to: ", 0
+formatin: db "%d", 0
+formatout: db "%d", 10, 0 ; newline, nul terminator
+
+segment .bss
+Limit   resd    1    ; find primes up to this limit
+Guess   resd    1    ; the current guess for prime
+
+SECTION  .text
+global main 
+extern scanf 
+extern printf     
+
+main:
+   pusha          ; save registers
+   push Message
+   call printf
+   add esp, 4    ; remove parameters
+   push Limit    ;address of Limit (second parameter)
+   push formatin ; arguments are right to left (first parameter)
+   call scanf
+   add esp,8    ; remove parameters
+   mov eax,2    ; printf("2\n");
+   write_int
+   mov eax,3               ; printf("3\n");
+   write_int
+   mov  dword [Guess],5     ; Guess = 5;  
+while_limit:                         ; while ( Guess <= Limit ) look for a factor of guess
+  mov eax,[Guess]
+  cmp eax, [Limit]
+  jnbe end_while_limit      ; use jnbe since numbers are unsigned
+  mov ebx, 3               ; ebx is factor = 3;
+while_factor:
+   mov eax,ebx
+   mul eax             ; edx:eax = eax*eax
+   jo end_while_factor ; if answer won't fit in eax alone
+   cmp eax,[Guess]
+   jnb end_while_factor ; if !(factor*factor < guess)
+   mov eax,[Guess]
+   mov edx,0
+   div ebx              ; edx = edx:eax % ebx
+   cmp edx,0
+   je end_while_factor   ; if !(guess % factor != 0)
+   add  ebx,2            ; factor += 2;
+   jmp  while_factor
+end_while_factor:
+   je end_if            ; if !(guess % factor != 0)
+   mov eax,[Guess]          ; printf("%u\n")
+   write_int
+end_if:
+    mov eax,[Guess]
+    add eax,2
+    mov [Guess],eax         ; guess += 2
+    jmp while_limit
+end_while_limit:
+    popa   ; restore registers in reverse order
+    mov eax,0 ; no error
+    ret
+
+

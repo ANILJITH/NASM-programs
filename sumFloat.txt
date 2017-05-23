@@ -1,0 +1,46 @@
+extern printf ; the C function to be called
+SECTION .data ; Data section
+table  dd 1.3
+ dd 1.0
+dd 2.03
+dd 3.0
+
+
+N  equ  ($-table)/4  ; number of items in table
+
+msg  db  "sum = %e",0x0a,0x00
+temp  dq 0
+sum   dd  0  
+
+
+SECTION .text		; Code section.
+global  main		; "C" main program 
+main: 			; label, start of main program
+mov ecx, N
+mov  ebx, 0
+fldz	; st0 <- 0
+for:
+fld  dword [table + ebx*4] ; st0 <- new value, st1 <- sum of previous
+fadd ST1			   ; st0 <- sum of new plus previous sum
+inc   ebx
+loop  for
+
+;;; get sum back from FPU
+
+fstp dword [sum] ; put final sum in variable
+
+;;; print resulting sum
+
+
+fld   dword [sum]    ; transform z in 64-bit word
+fstp qword [temp]  ; store in 64-bit temp and pop stack top
+push  dword [temp+4]  ; push temp as 2 32-bit words
+push  dword [temp]
+push dword msg  ; address of format string
+call printf   ; Call C function
+ add  esp, 12  ; pop stack 3*4 bytes
+mov  eax, 1 ; exit code, 0=normal
+mov  ebx, 0
+int  0x80;
+
+ 

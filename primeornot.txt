@@ -1,0 +1,66 @@
+section .data
+	msg db "Enter the num: ",0
+	msg1 db "Entered num is non-prime",0
+	msg2 db "Entered num is prime",0
+	num times 4 db 0
+	format db "%d",0
+section .text
+	global main
+	extern printf
+	extern scanf
+main:
+	push ebp
+	mov ebp,esp
+	
+	push msg
+	call printf
+	add esp,4
+	
+	push num
+	push format
+	call scanf
+	add esp,8
+	
+
+	mov eax,[num]
+	push eax
+	push format
+	call printf
+	add esp,8
+
+	mov eax,[num]	
+	cmp eax,2
+	jl nonprime
+	cmp eax,4 
+	jl prime
+	
+	mov ebx,2
+loop:	mov eax,[num]
+	xor edx,edx
+	div ebx 
+	cmp edx,0
+	jz nonprime
+	add ebx,1
+	cmp ebx,[num]
+	jl loop
+	jmp prime
+nonprime:
+	push msg1
+	call printf
+	add esp,4
+	jmp exit
+prime:
+	push msg2
+	call printf
+	add esp,4
+
+
+	
+	
+
+
+exit:
+	pop ebp
+	ret
+
+
